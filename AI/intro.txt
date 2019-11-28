@@ -1,0 +1,15 @@
+y(x) = ax + b 
+
+x2 - x1 = x4 - x3 =>
+=> y2 - y1 = y4 - y3
+
+D = [(xi, yi)] , x, y ->R, i = 1...N
+F(x, Q) = ?       F^(x, Q) -> x...y 
+
+E(Q) = E (yi - F^(xi, Q))^2
+
+x_ = 1/N * E.xi
+y_ = 1/N * E.yi
+
+a = E(xi - x_)(yi - y_) / E(xi - 1/x_)^2
+b = y_ - a*x_

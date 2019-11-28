@@ -1,0 +1,10 @@
+cin - read
+cout - write
+
+access modifiers
+private - visable only in class body
+public - visable outside the class
+protected - later
+
+singleton -- ?
+

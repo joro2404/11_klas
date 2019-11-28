@@ -1,0 +1,28 @@
+#headline {
+    color: red;
+}
+
+.headline {
+    color : black;
+
+}
+
+h1 {
+    color : yellow ;
+
+}
+
+p{
+    color: red !important;
+}
+
+.first p {
+
+    color: blue;
+}
+
+.second p {
+
+    color: yellow;
+}
+
