@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string>
+#include "./food.cpp"
+#include "./electronics.cpp"
+#include "./others.cpp"
 using namespace std;
 
 class Store{
@@ -15,5 +18,7 @@ class Store{
             this->income = income;
         }
 
-        
+        void add_product()
+
+
 };
