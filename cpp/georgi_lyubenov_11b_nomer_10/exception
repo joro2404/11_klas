@@ -1,0 +1,10 @@
+#include "exception.hh"
+#include <string>
+
+std::string what(std::string message){
+    return message;
+}
+
+OneExcepton::OneExcepton(std::string message){
+    this->message = message;
+}
