@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -19,39 +20,84 @@
 // предназначение на функцията: to make from a string an array of strings separated by ' '
 // PARAMETERS: one string
 //----------------------------------------------
-char** parse_cmdline (const char* cmdline ) {
+char** parse_cmdline (const char* cmdline){
     
+    // help is 2 diemnssional array to store the arrays of strings
+    //I use count_of_chars and count_of_words to track and help with the index
     char** help;
-    help[0] = malloc(sizeof(char));
-    int count_of_words = 0;
     int count_of_chars = 0;
+    int count_of_words = 0;
+    help = malloc(sizeof(char*)*1);
+    help[0] = malloc(sizeof(char)*1);
+    
+    
 
     for (int i = 0; i < strlen(cmdline); i++){
-        if(cmdline[i] == ' '){
-            printf("test\n");
-            count_of_chars = 0;
+        //if we have space that means we have new word 
+        if(cmdline[i] == ' ' || cmdline[i] == '\n'){
             count_of_words++;
-            help[count_of_words] = malloc(sizeof(char));
+            help = realloc(help, (count_of_words+1)*sizeof(char*));
+            help[count_of_words] = malloc(sizeof(char*)*1);
+            count_of_chars = 0;
+            help = realloc(help, (count_of_words+1)*sizeof(char*));
         }
+        //adding the chars of the string pretty simple 
         else{
             help[count_of_words][count_of_chars] = cmdline[i];
-            printf("test\n");
             count_of_chars++;
-            help[count_of_words] = realloc(help[count_of_chars], sizeof(char));
+            help[count_of_words] = realloc(help[count_of_words], (count_of_chars+1)*sizeof(char));
         }
     }
-
+    
+    help[count_of_words] = NULL;
     return help;
     
 }
 
+void free_memory(char** argv, char* input){
+    free(input);
+    for (int i = 0; argv[i+1] != NULL; i++){
+        free(argv[i]);
+    }
+    free(argv);
+}
+
 int main(){
 
-    // char* test = "/bin/ls -l /usr/include";
-    char** result = parse_cmdline("/bin/ls -l /usr/include");
+    while (1){
+        printf("$ ");
+        char* input;
+        size_t size = 0;
+        if(getline(&input, &size, stdin) <= 0){
+            free(input);
+            break;
+        }
+        
+        if(strlen(input) <= 1){
+            free(input);
+            continue;
+        }
+        
+        char** argv = parse_cmdline(input);
+        
+        pid_t pid = fork();
 
-    for (int j = 0; j<3; j++){
-        printf("%s", result[j]);
-        printf("\n");
+        if(pid == 0){
+            int check = execvp(argv[0], argv);
+            if(check != 0){
+                perror(argv[0]);
+                free_memory(argv, input);
+                break;
+            }
+        }
+        else if(pid == -1) {
+            perror("fork");
+
+        }
+
+        wait(&pid);
+
+        free_memory(argv, input);
+        
     }
 }
