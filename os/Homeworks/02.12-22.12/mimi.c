@@ -1,54 +1,58 @@
-//--------------------------------------------
-// NAME: Petar-Gabriel Matev
-// CLASS: XIb
-// NUMBER: 22
-// PROBLEM: #2
-// FILE NAME: main.c
-// FILE PURPOSE:
-// shell
-//---------------------------------------------
-
-#include <stddef.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include <string.h>
-
-char** parse_cmdline(const char* cmdline){
-    char** array;
-    array = malloc(sizeof(char*)*1);
-    array[0] = malloc(sizeof(char)*1);
-    char delim[] = " ";
-    char *ptr = strtok(cmdline, delim);
-    while(ptr != NULL)
-	{
-        printf("%s", ptr);
-		ptr = strtok(NULL, delim);
-	}
-
-    return array;
-}
-
-int main()
+char **separate(char *command)
 {
-	char *input;
-    size_t size = 32;
-    input = (char *)malloc(size * sizeof(char));
-    getline(&input,&size,stdin);
+	char separate[] =" ";
+	int i=0;
+    
+	char **array;
+    array = malloc(sizeof(char*));
+    array[0] = malloc(sizeof(char));
+	char *ptr = strtok(command,separate);
+	while(ptr !=NULL)
+	{
+        for (int j = 0; j < strlen(ptr); j++){
+            if(ptr[j] == '\n')continue;
+            array[i] = realloc(array[i], (j+1)*sizeof(char));
+            array[i][j] = ptr[j];
+        }
+        i++;
+        array = realloc(array, i*sizeof(char*));
+		ptr = strtok(NULL,separate);
+	}
+    array[i] = NULL;
+	return array;
+}
+int main()
+{	while(1){
+        printf("$ ");
+        int status;
+        char command[1024];
+        fgets(command,1024,stdin);
+        char **array=separate(command);
 
-	// char delim[] = " ";
-	// char *ptr = strtok(input, delim);
+        // for (int i = 0; array[i] != NULL; i++){
+        //     printf("%s\n",array[i]);
+        // }
+        
+        int process = fork();
+        if(process == 0){
+            if(execvp(array[0], array) != 0){
+                perror(array[0]);
+                break;
+            }
+        } else if(process == -1) {
+            perror("fork");
+        }
 
+        if(waitpid(process, &status, 0) != process) {
+            perror("");
+            return -1;
+        }
+    }
 
-    pid_t pid;
-    int status;
-
-	// while(ptr != NULL)
-	// {
-
-	// 	ptr = strtok(NULL, delim);
-	// }
-	return 0;
 }
