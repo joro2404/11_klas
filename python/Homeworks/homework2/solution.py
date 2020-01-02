@@ -89,7 +89,7 @@ class TicTacToeBoard(dict):
         if check_for_winner == 0:
             for i in range(9):
                 if moves[i] == " ":
-                    return "Game still in progress."
+                    return "Game in progress."
                     check_for_draw += 1
                     break
 

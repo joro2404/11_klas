@@ -1,55 +1,218 @@
-
 import unittest
-import solution
+from solution import TicTacToeBoard
 
 
-class TicTacHomeworkTest(unittest.TestCase):
-    def test_empty(self):
-        b = solution.TicTacToeBoard()
-        empty_board = '\n  -------------\n' +\
-            '3 |   |   |   |\n' +\
-            '  -------------\n' +\
-            '2 |   |   |   |\n' +\
-            '  -------------\n' +\
-            '1 |   |   |   |\n' +\
-            '  -------------\n' +\
-            '    A   B   C  \n'
+class TestTicTacToe(unittest.TestCase):
 
-        self.assertEqual(empty_board, b.__str__())
+    def setUp(self):
+        self.board = TicTacToeBoard()
 
-    def test_full(self):
-        d = solution.TicTacToeBoard()
-        full_board = '\n  -------------\n' +\
-            '3 | O | O | X |\n' +\
-            '  -------------\n' +\
-            '2 | X | X | O |\n' +\
-            '  -------------\n' +\
-            '1 | O | X | O |\n' +\
-            '  -------------\n' +\
-            '    A   B   C  \n'
+        # # column tests
+    def test_left_column_with_x_win(self):
+        self.board["A1"] = "X"
+        self.board["B2"] = "O"
+        self.board["A2"] = "X"
+        self.board["B3"] = "O"
+        self.board["A3"] = "X"
 
-        d["A1"] = 'O'
-        d["B1"] = 'X'
-        d["A3"] = 'O'
-        d["A2"] = 'X'
-        d["C2"] = 'O'
-        d["C3"] = 'X'
-        d["B3"] = 'O'
-        d["B2"] = 'X'
-        d["C1"] = 'O'
+        self.assertEqual("X wins!", self.board.game_status())
 
-        self.assertEqual(full_board, d.__str__())
+    def test_middle_column_with_x_win(self):
+        self.board["B1"] = "X"
+        self.board["A1"] = "O"
+        self.board["B2"] = "X"
+        self.board["A2"] = "O"
+        self.board["B3"] = "X"
 
-    def test_x_wins(self):
-        h = solution.TicTacToeBoard()
-        h["A1"] = 'X'
-        h["A2"] = 'O'
-        h["B1"] = 'X'
-        h["A3"] = 'O'
-        h["C1"] = 'X'
+        self.assertEqual("X wins!", self.board.game_status())
 
-        self.assertEqual('X wins!', h.game_status())
+    def test_right_column_with_x_win(self):
+        self.board["C1"] = "X"
+        self.board["A1"] = "O"
+        self.board["C2"] = "X"
+        self.board["B2"] = "O"
+        self.board["C3"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+        # # row tests
+    def test_low_row_with_x_win(self):
+        self.board["A1"] = "X"
+        self.board["A3"] = "O"
+        self.board["B1"] = "X"
+        self.board["B2"] = "O"
+        self.board["C1"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+    def test_middle_row_with_x_win(self):
+        self.board["A2"] = "X"
+        self.board["A1"] = "O"
+        self.board["B2"] = "X"
+        self.board["B3"] = "O"
+        self.board["C2"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+    def test_top_row_with_x_win(self):
+        self.board["A3"] = "X"
+        self.board["A2"] = "O"
+        self.board["B3"] = "X"
+        self.board["B2"] = "O"
+        self.board["C3"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+        # # diagonal tests
+    def test_main_diagonal_with_x_win(self):
+        self.board["A1"] = "X"
+        self.board["A2"] = "O"
+        self.board["B2"] = "X"
+        self.board["B3"] = "O"
+        self.board["C3"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+    def test_main_diagonal_with_x_win(self):
+        self.board["C1"] = "X"
+        self.board["A2"] = "O"
+        self.board["B2"] = "X"
+        self.board["B3"] = "O"
+        self.board["A3"] = "X"
+
+        self.assertEqual("X wins!", self.board.game_status())
+
+        # # column tests
+    def test_left_column_with_o_win(self):
+        self.board["A1"] = "O"
+        self.board["B1"] = "X"
+        self.board["A2"] = "O"
+        self.board["B2"] = "X"
+        self.board["A3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_middle_column_with_o_win(self):
+        self.board["B1"] = "O"
+        self.board["A1"] = "X"
+        self.board["B2"] = "O"
+        self.board["A2"] = "X"
+        self.board["B3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_right_column_with_o_win(self):
+        self.board["C1"] = "O"
+        self.board["A1"] = "X"
+        self.board["C2"] = "O"
+        self.board["A3"] = "X"
+        self.board["C3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+        # # row tests
+    def test_low_row_with_o_win(self):
+        self.board["A1"] = "O"
+        self.board["B2"] = "X"
+        self.board["B1"] = "O"
+        self.board["C2"] = "X"
+        self.board["C1"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_middle_row_with_o_win(self):
+        self.board["A2"] = "O"
+        self.board["A1"] = "X"
+        self.board["B2"] = "O"
+        self.board["C3"] = "X"
+        self.board["C2"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_top_row_with_o_win(self):
+        self.board["A3"] = "O"
+        self.board["A1"] = "X"
+        self.board["B3"] = "O"
+        self.board["B2"] = "X"
+        self.board["C3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+        # # diagonal tests
+    def test_main_diagonal_with_o_win(self):
+        self.board["A1"] = "O"
+        self.board["A2"] = "X"
+        self.board["B2"] = "O"
+        self.board["B3"] = "X"
+        self.board["C3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_main_diagonal_with_o_win(self):
+        self.board["C1"] = "O"
+        self.board["A2"] = "X"
+        self.board["B2"] = "O"
+        self.board["B3"] = "X"
+        self.board["A3"] = "O"
+
+        self.assertEqual("O wins!", self.board.game_status())
+
+    def test_draw(self):
+        self.board["B1"] = "O"
+        self.board["A1"] = "X"
+        self.board["A2"] = "O"
+        self.board["B2"] = "X"
+        self.board["C3"] = "O"
+        self.board["C2"] = "X"
+        self.board["A3"] = "O"
+        self.board["B3"] = "X"
+        self.board["C1"] = "O"
+
+        self.assertEqual("Draw!", self.board.game_status())
+
+    def test_game_in_progress(self):
+        self.board["A1"] = "X"
+        self.board["A2"] = "O"
+
+        self.assertEqual("Game in progress.", self.board.game_status())
+
+    # test __str__() method
+    def test_print_empty_board(self):
+
+        board_string = "\n  -------------\n\
+3 |   |   |   |\n\
+  -------------\n\
+2 |   |   |   |\n\
+  -------------\n\
+1 |   |   |   |\n\
+  -------------\n\
+    A   B   C  \n"
+
+        self.assertEqual(board_string, self.board.__str__())
+
+    def test_print_full_board(self):
+
+        self.board["B1"] = "O"
+        self.board["A1"] = "X"
+        self.board["A2"] = "O"
+        self.board["B2"] = "X"
+        self.board["C3"] = "O"
+        self.board["C2"] = "X"
+        self.board["A3"] = "O"
+        self.board["B3"] = "X"
+        self.board["C1"] = "O"
+
+        board_string = "\n  -------------\n\
+3 | O | X | O |\n\
+  -------------\n\
+2 | O | X | X |\n\
+  -------------\n\
+1 | X | O | O |\n\
+  -------------\n\
+    A   B   C  \n"
+
+        self.assertEqual(board_string, self.board.__str__())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
