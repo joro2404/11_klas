@@ -7,15 +7,14 @@ class Race{
 
     protected:
 
-    
     int lenght;
     int number_of_racers;
     std::vector< std::vector < Racer* > > race;
     public:
 
-    Race(int lenght, int number_of_racers);
+    Race(int lenght, int number_of_racers, std::vector < Racer* > racers, std::vector< std::vector < Racer* > > race);
 
-    void init_race(int lenght, int number_of_racers);
 
 };
+
 #endif
