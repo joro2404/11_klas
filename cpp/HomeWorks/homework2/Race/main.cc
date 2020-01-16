@@ -7,8 +7,8 @@
 #include "third.hh"
 using namespace std;
 
-// ideqta mi e kogato dvama sustezateli se blusnat i dvamata da igarqt toest i dvamata stavat NULL
-
+// ideqta mi e kogato dvama sustezateli se blusnat i dvamata da otpadat toest i dvamata stavat NULL
+//znam seg faultva no nemoga da razbera ot kude e veche stava i mnogo kusno
 int main(){
 
 
@@ -27,13 +27,15 @@ int main(){
 
     Race rally(10, 4, racers, race);
 
+    // cout << rally.race.size() << endl;
+    // cout << rally.race[1].size() << endl;
     std::vector <std::string> positions;
 
     while(positions.size() < 3){
-        racer1.move(race, positions);
-        racer2.move(race, positions);
-        racer3.move(race, positions);
-        racer4.move(race, positions);
+        racer1.move(rally.race, positions);
+        racer2.move(rally.race, positions);
+        racer3.move(rally.race, positions);
+        racer4.move(rally.race, positions);
     }
 
     cout << "Winner is -> " << positions[0] << endl;

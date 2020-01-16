@@ -9,7 +9,7 @@ class game: public media{
 
     public:
 
-    game(std::string title, std::string author, double price, int minutes);
+    game(std::string title, std::string author, double price, int hours);
     double calculate_price();
 };
 

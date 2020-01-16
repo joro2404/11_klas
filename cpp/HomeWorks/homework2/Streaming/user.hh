@@ -5,16 +5,15 @@
 #include "payment.hh"
 
 class user{
-    protected:
+    public:
 
     std::string name;
     std::string email;
-    std::vector< media > history_medias;
-    std::vector <payment > payments;
+    std::vector< media* > history_medias;
+    std::vector < payment > payments;
 
-    public:
 
-    user(std::string name, std::string email, std::vector< media > history_medias, std::vector <payment > payments);
+    user(std::string name, std::string email, std::vector< media* > history_medias, std::vector < payment > payments);
 
 };
 

@@ -5,12 +5,12 @@
 
 class Race{
 
-    protected:
+    public:
 
     int lenght;
     int number_of_racers;
     std::vector< std::vector < Racer* > > race;
-    public:
+    
 
     Race(int lenght, int number_of_racers, std::vector < Racer* > racers, std::vector< std::vector < Racer* > > race);
 

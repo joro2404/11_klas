@@ -3,13 +3,11 @@
 #include <string>
 
 class media{
-    protected:
-
-    std::string title;
+    public:
+    
     std::string author;
     double price;
-
-    public:
+    std::string title;
 
     media(std::string title, std::string author, double price);
     virtual double calculate_price() = 0;

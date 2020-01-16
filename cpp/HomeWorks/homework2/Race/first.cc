@@ -1,5 +1,7 @@
 #include "first.hh"
 #include "racer.hh"
+#include <iostream>
+using namespace std;
 
 void first::move(std::vector< std::vector < Racer* > > race, std::vector <std::string> positions){
 
@@ -10,17 +12,25 @@ void first::move(std::vector< std::vector < Racer* > > race, std::vector <std::s
     }
 
     if(finished == 0){
+        // cout << "test" << endl;
+        int x = 0;
+        int y = 0;
+        int check = 0;
+        int idk = 0;
 
-        int x, y, check;
         for (int i = 0; i < race.size(); i++){
             for (int j = 0; j < race[i].size(); j++){
                 if(race[i][j]->name == name){
                     x = i;
                     y = j;
+                    idk++;
+                    break;
                 }
             }
+            if(idk > 0 )break;
         }
         
+        // cout << race[x].size() << endl;
         for (int i = 0; i <= speed; i++){
             if(y+i >= race[x].size()){
                 positions.push_back(name);
@@ -28,7 +38,7 @@ void first::move(std::vector< std::vector < Racer* > > race, std::vector <std::s
                 check++;
                 break;
             }
-
+            // cout << race[x].size() << endl;
             if(race[x][y+i] != NULL){
                 race[x][y+i] = NULL;
                 race[x][y] = NULL;
@@ -37,10 +47,14 @@ void first::move(std::vector< std::vector < Racer* > > race, std::vector <std::s
             }
         }
 
+        cout << race[x].size() << endl;
+        cout << y+speed << endl;
         if(check == 0){
+            cout << y+speed << endl;
             race[x][y+speed] =  race[x][y];
             race[x][y] = NULL;
-        }  
+        } 
+        cout << y+speed << endl;
     }
 
     else{
