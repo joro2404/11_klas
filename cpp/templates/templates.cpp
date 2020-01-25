@@ -2,10 +2,10 @@
 #include <string>
 using namespace std;
 
-int Max(double a, double b){
+// int Max(double a, double b){
 
-    return a>b ? a:b;
-}
+//     return a>b ? a:b;
+// }
 
 template<class T>
 T Max(T a, T b){
