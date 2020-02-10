@@ -2,7 +2,7 @@
 #define CLOTHING_HH
 #include "item.hh"
 
-class Clothing:Item{
+class Clothing: public Item{
     public:
         std::string color;
         std::string size;

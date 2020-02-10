@@ -4,6 +4,7 @@
 #include "user.hh"
 #include "supplier.hh"
 #include "item.hh"
+#include "exception.hh"
 #include <vector>
 #include <string>
 

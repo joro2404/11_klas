@@ -7,13 +7,13 @@ class Item{
 
     public:
         std::string name;
-        float price;
+        double price;
         bool in_stock;
         Supplier* supplier;
         int delivery_time;
 
     
-        Item(std::string name, float price, bool in_stock, Supplier* supplier, int delivery_time);
+        Item(std::string name, double price, bool in_stock, Supplier* supplier, int delivery_time);
 
         
 };

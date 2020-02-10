@@ -15,7 +15,7 @@ class Order{
     
         Order(int id, User* user, std::vector <Item> ordered_items, std::vector <int> quantity, std::string status);
 
-        void add_item(Item item);
+        void add_item(Item* item);
 
 
 };

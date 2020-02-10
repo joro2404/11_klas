@@ -1,6 +1,6 @@
 #include "item.hh"
 
-Item::Item(std::string name, float price, bool in_stock, Supplier* supplier, int delivery_time){
+Item::Item(std::string name, double price, bool in_stock, Supplier* supplier, int delivery_time){
 
     this->name = name;
     this->price = price;
