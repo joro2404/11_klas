@@ -4,24 +4,27 @@ public class Squirrel implements IWinter{
     private String name;
     private String type;
     private int age;
-    private final int goForFood;
+    private int goForFood;
     private Burrow burrow;
 
     public Squirrel(String name, String type, int age) {
         this.name = name;
         this.type = type;
         this.age = age;
-        this.goForFood = 4;
+        this.goForFood = 0;
     }
 
     void addFood(Food food){
         burrow.addFood(food);
+        if(goForFood >= 4)throw new IncorrectGoingOutForFood("The squirrel already went out its max times for this winter!");
+        goForFood += 1;
     }
 
     @Override
     public void passWinter() {
         for(Food food : burrow.getFoods()){
             food.passWinter();
+            goForFood = 0;
         }
     }
 
