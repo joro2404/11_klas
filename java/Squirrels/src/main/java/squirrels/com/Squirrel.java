@@ -5,6 +5,7 @@ public class Squirrel implements IWinter{
     private String type;
     private int age;
     private int goForFood;
+    private final int maxGoForFood;
     private Burrow burrow;
 
     public Squirrel(String name, String type, int age) {
@@ -12,20 +13,19 @@ public class Squirrel implements IWinter{
         this.type = type;
         this.age = age;
         this.goForFood = 0;
+        this.maxGoForFood = 4;
     }
 
     void addFood(Food food){
         burrow.addFood(food);
-        if(goForFood >= 4)throw new IncorrectGoingOutForFood("The squirrel already went out its max times for this winter!");
+        //if(goForFood >= maxGoForFood)throw new IncorrectGoingOutForFood("The squirrel already went out its max times for this winter!");
         goForFood += 1;
     }
 
     @Override
     public void passWinter() {
-        for(Food food : burrow.getFoods()){
-            food.passWinter();
-            goForFood = 0;
-        }
+        burrow.passWinter();
+        goForFood = 0;
     }
 
     public String getName() {
@@ -52,15 +52,23 @@ public class Squirrel implements IWinter{
         this.age = age;
     }
 
-    public int getGoForFood() {
-        return goForFood;
-    }
-
     public Burrow getBurrow() {
         return burrow;
     }
 
     public void setBurrow(Burrow burrow) {
         this.burrow = burrow;
+    }
+
+    public int getGoForFood() {
+        return goForFood;
+    }
+
+    public void setGoForFood(int goForFood) {
+        this.goForFood = goForFood;
+    }
+
+    public int getMaxGoForFood() {
+        return maxGoForFood;
     }
 }

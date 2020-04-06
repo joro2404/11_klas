@@ -2,7 +2,7 @@ package main.java.squirrels.com;
 
 import java.util.ArrayList;
 
-public class Burrow {
+public class Burrow implements IWinter{
 
     private ArrayList<Food> foods;
 
@@ -16,6 +16,13 @@ public class Burrow {
 
     public Burrow(ArrayList<Food> foods) {
         this.foods = foods;
+    }
+
+    @Override
+    public void passWinter() {
+        for(Food food : foods){
+            food.passWinter();
+        }
     }
 
     public ArrayList<Food> getFoods() {

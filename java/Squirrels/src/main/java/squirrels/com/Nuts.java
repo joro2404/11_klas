@@ -10,4 +10,14 @@ public class Nuts extends Food implements IWinter{
     public void passWinter() {
         winters_passed += 1;
     }
+
+    @Override
+    public int getWinters_passed() {
+        return winters_passed;
+    }
+
+    @Override
+    public void setWinters_passed(int winters_passed) {
+        this.winters_passed = winters_passed;
+    }
 }

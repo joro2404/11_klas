@@ -1,6 +1,6 @@
 package main.java.squirrels.com;
 
-public abstract class Food implements IWinter {
+public class Food implements IWinter{
     protected double quality;
     protected double quantity;
     protected int winters_passed;
@@ -8,6 +8,10 @@ public abstract class Food implements IWinter {
     Food(double quality, double quantity){
         this.quality = quality;
         this.quantity = quantity;
+    }
+
+    public void passWinter(){
+
     }
 
     public double getFoodScore(){
