@@ -49,7 +49,8 @@ int main() {
 		num_of_threads++;
 		pthread_t threads[num_of_threads];
         fgets(command, 24, stdin);
-        if(command[0] == 'e')pthread_exit(NULL);
+        if(command != 'e' && command[0] != 'p')printf("Supported commands:\np N - Starts a new calculation for the number of primes from 1 to N\ne - Waits for all calculations to finish and exits\n");
+        else if(command[0] == 'e')pthread_exit(NULL);
         else if(command[0] == 'p'){
             for (int i = 2; command[i] != '\0'; i++){
                 number[i-2] = command[i];
@@ -61,6 +62,7 @@ int main() {
                 return 1;
             }
         }
+        printf("Prime calculation started for N=%ld\n", n);
     }
 
 }
