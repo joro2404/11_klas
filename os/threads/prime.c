@@ -39,29 +39,28 @@ int main() {
 
 	int num_of_threads = 0;
     
-    void* return_value;
-    char command[24];
-    char number[10];
-
     while(1){
 
         long n = 0;
-		num_of_threads++;
-		pthread_t threads[num_of_threads];
-        fgets(command, 24, stdin);
-        if(command != 'e' && command[0] != 'p')printf("Supported commands:\np N - Starts a new calculation for the number of primes from 1 to N\ne - Waits for all calculations to finish and exits\n");
+		void* return_value;
+        char command[256];
+        char number[256];
+        fgets(command, 256, stdin);
+        if(command[0] != 'e' && command[0] != 'p')printf("Supported commands:\np N - Starts a new calculation for the number of primes from 1 to N\ne - Waits for all calculations to finish and exits\n");
         else if(command[0] == 'e')pthread_exit(NULL);
         else if(command[0] == 'p'){
             for (int i = 2; command[i] != '\0'; i++){
                 number[i-2] = command[i];
-            }
-            
-            n = (long)atoi(number);
-            if(pthread_create(&threads[0], NULL, get_primes, (void*)n) == -1){
-                perror("pthread_create");
-                return 1;
+                n = (long)atoi(number);
             }
         }
+        num_of_threads++;
+        pthread_t threads[num_of_threads];
+        if(pthread_create(&threads[num_of_threads - 1], NULL, get_primes, (void*)n) == -1){
+            perror("pthread_create");
+            return 1;
+        }
+        
         printf("Prime calculation started for N=%ld\n", n);
     }
 
