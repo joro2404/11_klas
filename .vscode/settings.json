@@ -69,7 +69,9 @@
         "thread": "cpp",
         "typeindex": "cpp",
         "typeinfo": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "stdio.h": "c",
+        "stdlib.h": "c"
     },
     "C_Cpp.dimInactiveRegions": false
 }
