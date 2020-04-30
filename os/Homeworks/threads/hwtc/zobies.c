@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -95,14 +96,6 @@ void* mine(void* args)
 			{
 				break;
 			}else{
-                //for (int i = 0; i < mineral_blocks_count; ++i)
-                // {
-                //     if (local_blocks[i] == 0)
-                //     {
-                //         return 0;
-                //     }
-                // }
-                // return 1;
 				if(check_if_mineral_blocks_empty(local_blocks))
 				{
 					return 0;
@@ -298,7 +291,14 @@ void destroy()
 
 int check_if_mineral_blocks_empty(int local_blocks[])
 {
-	
+	for (int i = 0; i < mineral_blocks_count; ++i)
+	{
+		if (local_blocks[i] == 0)
+		{
+			return 0;
+		}
+	}
+	return 1;
 }
 
 void lock(pthread_mutex_t mutex)
@@ -349,3 +349,4 @@ void print_error(int error)
 
 	exit(-1);
 }
+
