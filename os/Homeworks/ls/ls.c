@@ -29,7 +29,54 @@ int count_of_files = 0;
 int check = 0;
 
 
+
+//getting the maggic to be done by https://stackoverflow.com/questions/10323060/printing-file-permissions-like-ls-l-using-stat2-in-c
+//--------------------------------------------
+// FUNCTION: print_detailed_info (име на функцията)
+// предназначение на функцията get get the read, write and execute, and others as time and user, group
+// PARAMETERS: filename, to get the current filepath
+// списък с параметрите на функцията
+// и тяхното значение
+//----------------------------------------------
+void print_detailed_info(char* filename){
+
+    struct stat st;
+	stat(filename, &st);
+
+	struct passwd *pwd;
+	struct group *grp;
+
+	char date[20];
+
+    // printf( (S_ISDIR(st.st_mode)) ? "d" : "-");
+    printf( (st.st_mode & S_IRUSR) ? "r" : "-");
+    printf( (st.st_mode & S_IWUSR) ? "w" : "-");
+    printf( (st.st_mode & S_IXUSR) ? "x" : "-");
+    printf( (st.st_mode & S_IRGRP) ? "r" : "-");
+    printf( (st.st_mode & S_IWGRP) ? "w" : "-");
+    printf( (st.st_mode & S_IXGRP) ? "x" : "-");
+    printf( (st.st_mode & S_IROTH) ? "r" : "-");
+    printf( (st.st_mode & S_IWOTH) ? "w" : "-");
+    printf( (st.st_mode & S_IXOTH) ? "x" : "-");
+    printf(" %ld ",st.st_nlink);
+    pwd = getpwuid(st.st_uid);
+    printf("%s ", pwd->pw_name);
+    grp = getgrgid(st.st_gid);
+    printf("%s ", grp->gr_name);
+	printf("%ld ", st.st_size);
+    // printf("%ld ", st.st_size);
+	strftime(date, 20, "%b %d %H:%M", localtime(&(st.st_mtime)));
+	printf("%s", date);
+}
+
 // a function to find the type of the file 
+//--------------------------------------------
+// FUNCTION: get_type_of_file (име на функцията)
+// предназначение на функцията get the type as said in the presentation
+// PARAMETERS: filename, same as the previous
+// списък с параметрите на функцията
+// и тяхното значение
+//----------------------------------------------
 char get_type_of_file(char *filename){
 
 	struct stat st;
@@ -50,64 +97,120 @@ char get_type_of_file(char *filename){
 		if(S_ISSOCK(st.st_mode))return 's';
 		
 	}else{
-        char error[100 + strlen(filename)];
-		sprintf(error, "ls: cannot access '%s'", filename);
-		perror(error);
-		return '!';
+        perror("stat");
 	}
 }
+//--------------------------------------------
+// FUNCTION: read_dir (име на функцията)
+// предназначение на функцията whole logic and the body of the program
+// PARAMETERS: dir_name, to get the directory
+// списък с параметрите на функцията
+// и тяхното значение
+//----------------------------------------------
 
 void read_dir(char* dir_name){
     if(check)printf("\n");
+    if(arguments > 1 || R_flag == 1)printf("%s:\n", dir_name);
 
     int is_recursive = 0;
+    int total_block_size = 0;
 
-    struct dirent *entry;
-    DIR *dir = opendir(dir_name);
+    if(get_type_of_file(dir_name) == 'd'){
 
-    if(dir == NULL){
-        char error[100 + strlen(dir_name)];
-		sprintf(error, "ls: cannot access '%s'", dir_name);
-		perror(error);
-    }else{
-        if(arguments > 1)printf("%s:\n", dir_name);
-        while(entry = readdir(dir)){
-            char content_name[512];
-            sprintf(content_name, "%s/%s", dir_name, entry->d_name);
-            int is_printed = 0;
+        struct dirent *entry;
+        DIR *dir = opendir(dir_name);
+        if(dir == NULL){
+            perror("opendir");
+        }else{
+            // if(arguments > 1)printf("%s:\n", dir_name);
+            while(entry = readdir(dir)){
+                char file_name[512];
+                sprintf(file_name, "%s/%s", dir_name, entry->d_name);
+                int is_added = 0;
 
-            if( (strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && entry->d_name[0] != '.' && normal_mode_flag == 1 && is_printed == 0){
-                
-                printf("%c", get_type_of_file(content_name));   
-                printf(" %s\n", entry->d_name);
-                is_printed++;
+                if((strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && A_flag == 1 && is_added == 0){
+                    if(l_flag == 1){
+                        struct stat st;
+                        stat(file_name, &st);
+
+                        total_block_size += st.st_blocks;
+                        is_added++;
+                    }
+                }
+
+                if((strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && entry->d_name[0] != '.' && l_flag == 1 && is_added == 0){
+                    struct stat st;
+                    stat(file_name, &st);
+
+                    total_block_size += st.st_blocks;
+                    is_added++;
+                }
+
             }
 
-            if( (strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && A_flag == 1 && is_printed == 0){
-                printf("%c", get_type_of_file(content_name));   
-                printf(" %s\n", entry->d_name);
-                is_printed++;
-            }
-
-            if( (strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && R_flag == 1 && is_printed == 0){
-                is_recursive = 1;
-            }
-
-            if((strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && l_flag == 1 && is_printed == 0){
-                printf("%c", get_type_of_file(content_name));
-                // print_detailed_info(content_name);   
-                printf(" %s\n", entry->d_name);
-                is_printed++;
-            }
-            
+            closedir(dir);
         }
 
-        closedir(dir);
+        dir = opendir(dir_name);
+        if(dir == NULL){
+            perror("opendir");
+        }else{
+            
+            if (l_flag == 1)printf("total %d\n", total_block_size/2);
+            while(entry = readdir(dir)){
+                char file_name[512];
+                sprintf(file_name, "%s/%s", dir_name, entry->d_name);
+                int is_printed = 0;
+
+                if((strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && A_flag == 1 && is_printed == 0){
+                    // if (l_flag == 1)printf("total %d\n", total_block_size/2);
+                    printf("%c", get_type_of_file(file_name));
+                    if(l_flag == 1)print_detailed_info(file_name);
+                    printf(" %s\n", entry->d_name);
+                    is_printed++;
+                }
+
+                if((strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0) && entry->d_name[0] != '.' && is_printed == 0){
+                    // if (l_flag == 1)printf("total %d\n", total_block_size/2);
+                    printf("%c", get_type_of_file(file_name));
+                    if(l_flag == 1)print_detailed_info(file_name);
+                    printf(" %s\n", entry->d_name);
+                    is_printed++;
+                }
+
+                if(R_flag == 1)is_recursive = 1;
+                
+            }
+
+            closedir(dir);
+        }
+        if(is_recursive == 1){
+        
+            dir = opendir(dir_name);
+            if(dir == NULL){
+                perror("opendir");
+            }else{
+                // if(arguments > 1)printf("%s:\n", dir_name);
+                while(entry = readdir(dir)){
+                    char file_name[512];
+                    sprintf(file_name, "%s/%s", dir_name, entry->d_name);
+                    int is_added = 0;
+
+                    if( get_type_of_file(file_name) == 'd' && (strcmp(".", entry->d_name) != 0 && strcmp("..", entry->d_name) != 0)){
+                        printf("\n");
+                        // printf("%s:\n", file_name);
+                        read_dir(file_name);
+                    }
+
+                }
+
+                closedir(dir);
+            }
+        }
     }
-    
 }
 
-// void print_detailed_info(char* filename);
+
 
 int main(int argc, char** argv){
 
@@ -137,7 +240,7 @@ int main(int argc, char** argv){
         }
     }
 
-    if(A_flag == 0 && R_flag == 0 && l_flag == 0)normal_mode_flag = 1;
+    if(A_flag == 0 && l_flag == 0 && R_flag == 0)normal_mode_flag = 1;
 
     for(int i = 0; optind < argc; optind++, i++){      
         if(get_type_of_file(argv[optind]) == 'd'){
@@ -159,6 +262,7 @@ int main(int argc, char** argv){
 
     for(int i = count_of_files; i > 0; i--){
         printf("- %s\n", files[i-1]);
+        check = 1;
     }
 
     for(int i = arguments; i > 0; i--){
@@ -170,10 +274,5 @@ int main(int argc, char** argv){
 
 
 
-    // printf("R_flag -> %d\nA_flag -> %d\nl_flag -> %d\n", R_flag, A_flag, l_flag);
-
-    // for(int i = 0; i < arguments; i++){
-    //     printf("%s\n", dirs[i]);
-    // }
     return 0;
 }
